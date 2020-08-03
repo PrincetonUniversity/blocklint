@@ -1,28 +1,130 @@
 import re
 import sys
+import argparse
+import os
 
 
 ignore_class = '[^a-zA-Z0-9]'
 
+# https://pycodestyle.pycqa.org/en/latest/intro.html#configuration
+# try:
+#     if sys.platform == 'win32':
+#         USER_CONFIG = os.path.expanduser(r'~\.pycodestyle')
+#     else:
+#         USER_CONFIG = os.path.join(
+#             os.getenv('XDG_CONFIG_HOME') or os.path.expanduser('~/.config'),
+#             'pycodestyle'
+#         )
+# except ImportError:
+#     USER_CONFIG = None
 
-# TODO add filename input, default to all files in current dir
+
 def main():
-    blocklist = ['master', 'slave', 'whitelist', 'blacklist']
-    checkers = [re.compile(condition_re(item), re.IGNORECASE)
-                for item in blocklist]
+    args = get_args()
+    word_checkers = generate_re(args)
 
-    fname = sys.argv[1]
-    with open(fname, 'r') as infile:
-        for i, line in enumerate(infile, 1):
-            for c, name in zip(checkers, blocklist):
-                match = c.search(line)
-                if match:
-                    print(f'{fname}:{i}:{match.start()+1}: use of "{name}"')
+    for file in args['files']:
+        try:
+            for i, line in enumerate(open(file, 'r'), 1):
+                for match in check_line(line, word_checkers, file, i):
+                    print(match)
+        except FileNotFoundError:
+            pass
 
 
-def condition_re(input_pattern):
-    return (ignore_class + '?').join(list(input_pattern))
+def get_args(args=None):
+    parser = argparse.ArgumentParser(description='Lint block-listed words')
+    parser.add_argument('files', nargs='*',
+                        help='Files or directories to lint, default all '
+                        'files in current directory')
+    parser.add_argument('--blocklist', help='Comma separated list of words '
+                        'to lint in any context, with possibly special '
+                        'characters between, case insensitive'
+                        'DEFAULT to master,slave,whitelist,blacklist')
+    parser.add_argument('--wordlist', help='Comma separated list of words '
+                        'to lint as whole words, with possibly special '
+                        'characters between, case insensitive')
+    parser.add_argument('--exactlist', help='Comma separated list of words '
+                        'to lint as whole words exactly as entered')
+    args = vars(parser.parse_args(args))
 
+    # from least to most restrictive
+    wordlists = ('blocklist', 'wordlist', 'exactlist')
+
+    # TODO add in checks for config files
+    if args['blocklist'] is None and \
+            args['wordlist'] is None and \
+            args['exactlist'] is None:
+        args['blocklist'] = 'master,slave,whitelist,blacklist'
+
+    for wordlist in wordlists:
+        if args[wordlist] is not None:
+            # split CSV, remove duplicates
+            args[wordlist] = set(args[wordlist].split(','))
+        else:
+            args[wordlist] = set()
+
+    # remove repeats across lists from least to most restrictive
+    for i, wordlist in enumerate(wordlists):
+        for other in wordlists[i+1:]:
+            args[other] -= args[wordlist]
+
+        # sort for deterministic output
+        args[wordlist] = sorted(list(args[wordlist]))
+
+    # parse files argument into individual files
+    if not args['files']:
+        args['files'] = [os.getcwd()]
+
+    files = []
+    for file in args['files']:
+        if os.path.isdir(file):
+            files += [os.path.join(file, f) for f in os.listdir(file)
+                      if os.path.isfile(os.path.join(file, f))]
+        # isabs detects pipes
+        elif os.path.isfile(file) or os.path.isabs(file):
+            files.append(file)
+
+    args['files'] = files
+
+    return args
+
+
+def generate_re(args):
+    result = {}
+
+    result.update(
+        {word: re.compile(ignore_special(word), re.IGNORECASE)
+         for word in args['blocklist']})
+    result.update(
+        {word: re.compile(word_boundaries(ignore_special(word)), re.IGNORECASE)
+         for word in args['wordlist']})
+    result.update(
+        {word: re.compile(word_boundaries(re.escape(word)))
+         for word in args['exactlist']})
+
+    return result
+
+
+def ignore_special(input_pattern):
+    return (ignore_class + '?').join(re.escape(char) for char in input_pattern)
+
+
+def word_boundaries(input_pattern):
+    if input_pattern:
+        input_pattern = r'\b' + input_pattern + r'\b'
+    return input_pattern
+
+
+def check_line(line, word_checkers, file, line_number):
+    for word, regex in word_checkers.items():
+        match = regex.search(line)
+        if match:
+            yield '{file}:{line_number}:{position}: use of "{word}"'.format(
+                file=file,
+                line_number=line_number,
+                position=match.start()+1,
+                word=word)
 
 if __name__ == '__main__':
     main()
