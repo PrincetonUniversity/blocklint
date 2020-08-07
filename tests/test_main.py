@@ -12,14 +12,18 @@ def test_get_args_wordlists(mocker):
         'blocklist': ['blacklist', 'master', 'slave', 'whitelist'],
         'exactlist': [],
         'files': [],
+        'end_pos': False,
+        'stdin': False,
         'wordlist': []}
 
     # set each list in turn
-    args = bl.get_args('--blocklist test'.split())
+    args = bl.get_args('--stdin --blocklist test'.split())
     assert args == {
         'blocklist': ['test'],
         'exactlist': [],
         'files': [],
+        'end_pos': False,
+        'stdin': True,
         'wordlist': []}
 
     args = bl.get_args('--exactlist test,test2'.split())
@@ -27,6 +31,8 @@ def test_get_args_wordlists(mocker):
         'blocklist': [],
         'exactlist': ['test', 'test2'],
         'files': [],
+        'end_pos': False,
+        'stdin': False,
         'wordlist': []}
 
     args = bl.get_args('--wordlist test2'.split())
@@ -34,27 +40,33 @@ def test_get_args_wordlists(mocker):
         'blocklist': [],
         'exactlist': [],
         'files': [],
+        'end_pos': False,
+        'stdin': False,
         'wordlist': ['test2']}
 
     # remove duplicate words
-    args = bl.get_args(('--blocklist test,test '
+    args = bl.get_args(('--end-pos --blocklist test,test '
                         '--exactlist test2,test2 '
                         '--wordlist test3,test3').split())
     assert args == {
         'blocklist': ['test'],
         'exactlist': ['test2'],
         'files': [],
+        'end_pos': True,
+        'stdin': False,
         'wordlist': ['test3']}
 
     # remove words from restrictive lists that are in more permissive ones
     # e.g. blocklist will match words and exact
-    args = bl.get_args(('--blocklist test '
+    args = bl.get_args(('-e --blocklist test '
                         '--exactlist test '
                         '--wordlist test').split())
     assert args == {
         'blocklist': ['test'],
         'exactlist': [],
         'files': [],
+        'end_pos': True,
+        'stdin': False,
         'wordlist': []}
 
     args = bl.get_args(('--blocklist test1 '
@@ -64,6 +76,8 @@ def test_get_args_wordlists(mocker):
         'blocklist': ['test1'],
         'exactlist': [],
         'files': [],
+        'end_pos': False,
+        'stdin': False,
         'wordlist': ['test']}
 
 
@@ -113,16 +127,16 @@ def test_generate_re_matches():
         'test:1:11: use of "longerwordtotest"'  # special
     ]
     assert list(bl.check_line('more l\\o|n?g[e]r{w}o,r.d<t>o`t~e;s:t',
-                              regexes, 'test', 2)) == [
-        'test:2:6: use of "longerwordtotest"'  # more special
+                              regexes, 'test', 2, end_pos=True)) == [
+        'test:2:6:37: use of "longerwordtotest"'  # more special
     ]
     assert list(bl.check_line('hereinababword', regexes, 'test', 3)) == [
         'test:3:8: use of "bab"'  # ignore case, special
     ]
 
     assert list(bl.check_line('aCAC not found, but !c@A?c. is ',
-                              regexes, 'test', 4)) == [
-        'test:4:22: use of "cac"'  # ignore case, special
+                              regexes, 'test', 4, end_pos=True)) == [
+        'test:4:22:27: use of "cac"'  # ignore case, special
     ]
 
     assert list(bl.check_line('adad d@ad and DaD are missed, but not ,dad"',

@@ -23,13 +23,21 @@ def main():
     args = get_args()
     word_checkers = generate_re(args)
 
-    for file in args['files']:
-        try:
-            for i, line in enumerate(open(file, 'r'), 1):
-                for match in check_line(line, word_checkers, file, i):
-                    print(match)
-        except FileNotFoundError:
-            pass
+    if args['stdin']:
+        process_file(sys.stdin, 'stdin', word_checkers, args['end_pos'])
+    else:
+        for file in args['files']:
+            with open(file, 'r') as handle:
+                process_file(handle, file, word_checkers, args['end_pos'])
+
+def process_file(input_file, file_name, word_checkers, end_pos):
+    try:
+        for i, line in enumerate(input_file, 1):
+            for match in check_line(line, word_checkers,
+                                    file_name, i, end_pos):
+                print(match)
+    except FileNotFoundError:
+        pass
 
 
 def get_args(args=None):
@@ -46,6 +54,8 @@ def get_args(args=None):
                         'characters between, case insensitive')
     parser.add_argument('--exactlist', help='Comma separated list of words '
                         'to lint as whole words exactly as entered')
+    parser.add_argument('-e', '--end-pos', action='store_true')
+    parser.add_argument('--stdin', action='store_true')
     args = vars(parser.parse_args(args))
 
     # from least to most restrictive
@@ -116,14 +126,18 @@ def word_boundaries(input_pattern):
     return input_pattern
 
 
-def check_line(line, word_checkers, file, line_number):
+def check_line(line, word_checkers, file, line_number, end_pos=False):
+    fmt_str = '{file}:{line_number}:{start}: use of "{word}"'
+    if end_pos:
+        fmt_str = '{file}:{line_number}:{start}:{end}: use of "{word}"'
     for word, regex in word_checkers.items():
         match = regex.search(line)
         if match:
-            yield '{file}:{line_number}:{position}: use of "{word}"'.format(
+            yield fmt_str.format(
                 file=file,
                 line_number=line_number,
-                position=match.start()+1,
+                start=match.start()+1,
+                end=match.end(),
                 word=word)
 
 if __name__ == '__main__':

@@ -1,6 +1,6 @@
 # blocklint
 
-If you’ve used a modern IDE, you know the importance of immediate feedback
+If you've used a modern IDE, you know the importance of immediate feedback
 for compilation errors or even stylistic slip ups.  Knowing all variables
 should be declared or that lines must be less than 80 characters long is good,
 but adhering to those rules takes a back seat when in the flow of writing
@@ -10,7 +10,7 @@ becomes more intuitive but the linter is always there to nudge you if you slip.
 
 We are in the midst of changing attitudes towards words and phrases that are
 not inclusive. Not only are developers acknowledging the offensive history of
-terms like “master/slave” and “blacklist/whitelist”, but we are taking active
+terms like "master/slave" and "blacklist/whitelist", but we are taking active
 steps to remove their usage and replace them with more appropriate language. 
 This tool is not a commentary on inclusion, but rather a utility to detect
 whatever words you'd like to remove from code.
@@ -68,4 +68,41 @@ $ blocklint --wordlist test,asdf <(echo thisTEST will not match but T=E-ST, will
 
 $ blocklint --exactlist Test <(echo thisTest, tEST, T-est fail but Test! matches)
 /dev/fd/63:1:32: use of "Test"
+```
+The `-e,--end-pos` flag will provide the end position of the match in addition
+to the start position.
+
+The `--stdin` flag will take values from stdin instead of a file or directory.
+
+## Integration with ALE
+Blocklist can be used with [ALE](https://github.com/dense-analysis/ale) for
+vim by adding the following to your vimrc:
+```vim
+" Inclusive syntax {{{1
+augroup BlocklintALE
+  autocmd!
+  autocmd User ALEWantResults call BlocklintHook(g:ale_want_results_buffer)
+augroup END
+
+function! BlocklintHook(buffer) abort
+  " Tell ALE we're going to check this buffer.
+  call ale#other_source#StartChecking(a:buffer, 'blocklint')
+  call ale#command#Run(a:buffer, 'blocklint -e --stdin',
+              \ function('BlocklintWorkDone'), {'read_buffer': 1})
+endfunction
+
+function! BlocklintWorkDone(buffer, results, metadata) abort
+  " Send results to ALE after they have been collected.
+  let l:pattern = '\v^[^:]+:(\d+):(\d+):(\d+): (.+)$'
+  let l:output = []
+  for l:match in ale#util#GetMatches(a:results, l:pattern)
+    call add(l:output, {
+              \ 'lnum': l:match[1],
+              \ 'col': l:match[2],
+              \ 'end_col': l:match[3],
+              \ 'text': l:match[4],
+              \ 'type': 'E'})
+  endfor
+  call ale#other_source#ShowResults(a:buffer, 'blocklint', l:output)
+endfunction
 ```
