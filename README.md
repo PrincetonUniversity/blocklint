@@ -1,5 +1,11 @@
 # blocklint
+[![GitHub Actions (Tests)](https://github.com/troycomi/blocklint/workflows/ToxTests/badge.svg)](https://github.com/troycomi/blocklint)
+[![GitHub license](https://img.shields.io/github/license/troycomi/blocklint)](https://github.com/troycomi/blocklint/blob/master/LICENSE)
 
+**blocklint** is a command line utility for finding non-inclusive wording.
+This project is inspired by [Alex.js](alexjs.com).
+
+## About
 If you've used a modern IDE, you know the importance of immediate feedback
 for compilation errors or even stylistic slip ups.  Knowing all variables
 should be declared or that lines must be less than 80 characters long is good,
