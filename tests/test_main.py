@@ -117,10 +117,14 @@ def test_generate_re_matches():
 
     assert list(bl.check_line('no matches', regexes, 'test', 1)) == []
     assert list(bl.check_line('bab bab bab', regexes, 'test', 1)) == [
-        'test:1:1: use of "bab"'  # only match first
+        'test:1:1: use of "bab"',  # gets all babs
+        'test:1:5: use of "bab"',
+        'test:1:9: use of "bab"'
     ]
     assert list(bl.check_line('B-a*B bab bab', regexes, 'test', 1)) == [
-        'test:1:1: use of "bab"'  # ignore case, special
+        'test:1:1: use of "bab"',  # ignore case, special
+        'test:1:7: use of "bab"',
+        'test:1:11: use of "bab"'
     ]
     assert list(bl.check_line('this is a l!o@n#g$e%r^w&o*r(d)t-o_t+e=s/t',
                               regexes, 'test', 1)) == [
@@ -128,7 +132,7 @@ def test_generate_re_matches():
     ]
     assert list(bl.check_line('more l\\o|n?g[e]r{w}o,r.d<t>o`t~e;s:t',
                               regexes, 'test', 2, end_pos=True)) == [
-        'test:2:6:37: use of "longerwordtotest"'  # more special
+        'test:2:6:36: use of "longerwordtotest"'  # more special
     ]
     assert list(bl.check_line('hereinababword', regexes, 'test', 3)) == [
         'test:3:8: use of "bab"'  # ignore case, special
@@ -136,10 +140,22 @@ def test_generate_re_matches():
 
     assert list(bl.check_line('aCAC not found, but !c@A?c. is ',
                               regexes, 'test', 4, end_pos=True)) == [
-        'test:4:22:27: use of "cac"'  # ignore case, special
+        'test:4:22:26: use of "cac"'  # ignore case, special
     ]
 
     assert list(bl.check_line('adad d@ad and DaD are missed, but not ,dad"',
                               regexes, 'test', 5)) == [
         'test:5:40: use of "dad"'  # ignore case, special
     ]
+
+    regexes = bl.generate_re({
+        'blocklist': ['blacklist', 'master', 'slave', 'whitelist'],
+        'wordlist': [],
+        'exactlist': [],
+    })
+    assert list(bl.check_line(
+        'int test(std::vector<int> blacklist, int master){',
+        regexes, 'test', 1)) == [
+            'test:1:27: use of "blacklist"',
+            'test:1:42: use of "master"'
+        ]

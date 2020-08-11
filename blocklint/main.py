@@ -2,10 +2,12 @@ import re
 import sys
 import argparse
 import os
+from collections import OrderedDict
 
 
 ignore_class = '[^a-zA-Z0-9]'
 
+# TODO fix broken pipe error
 # https://pycodestyle.pycqa.org/en/latest/intro.html#configuration
 # try:
 #     if sys.platform == 'win32':
@@ -54,8 +56,10 @@ def get_args(args=None):
                         'characters between, case insensitive')
     parser.add_argument('--exactlist', help='Comma separated list of words '
                         'to lint as whole words exactly as entered')
-    parser.add_argument('-e', '--end-pos', action='store_true')
-    parser.add_argument('--stdin', action='store_true')
+    parser.add_argument('-e', '--end-pos', action='store_true',
+                        help='Show the end position of a match in output')
+    parser.add_argument('--stdin', action='store_true',
+                        help='Use stdin as input instead of file list')
     args = vars(parser.parse_args(args))
 
     # from least to most restrictive
@@ -80,7 +84,7 @@ def get_args(args=None):
             args[other] -= args[wordlist]
 
         # sort for deterministic output
-        args[wordlist] = sorted(list(args[wordlist]))
+        args[wordlist] = sorted(args[wordlist])
 
     # parse files argument into individual files
     if not args['files']:
@@ -101,17 +105,17 @@ def get_args(args=None):
 
 
 def generate_re(args):
-    result = {}
+    result = OrderedDict()
 
-    result.update(
-        {word: re.compile(ignore_special(word), re.IGNORECASE)
-         for word in args['blocklist']})
-    result.update(
-        {word: re.compile(word_boundaries(ignore_special(word)), re.IGNORECASE)
-         for word in args['wordlist']})
-    result.update(
-        {word: re.compile(word_boundaries(re.escape(word)))
-         for word in args['exactlist']})
+    for word in args['blocklist']:
+        result[word] = re.compile(ignore_special(word), re.IGNORECASE)
+
+    for word in args['wordlist']:
+        result[word] = re.compile(word_boundaries(ignore_special(word)),
+                                  re.IGNORECASE)
+
+    for word in args['exactlist']:
+        result[word] = re.compile(word_boundaries(re.escape(word)))
 
     return result
 
@@ -131,8 +135,7 @@ def check_line(line, word_checkers, file, line_number, end_pos=False):
     if end_pos:
         fmt_str = '{file}:{line_number}:{start}:{end}: use of "{word}"'
     for word, regex in word_checkers.items():
-        match = regex.search(line)
-        if match:
+        for match in regex.finditer(line):
             yield fmt_str.format(
                 file=file,
                 line_number=line_number,

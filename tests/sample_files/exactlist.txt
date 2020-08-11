@@ -1,0 +1,4 @@
+tests/sample_files/test.cc:1:27: use of "blacklist"
+tests/sample_files/test.cc:4:17: use of "blacklist"
+tests/sample_files/test.py:4:10: use of "blacklist"
+tests/sample_files/test.py:6:17: use of "blacklist"
