@@ -1,6 +1,6 @@
 # blocklint
-[![GitHub Actions (Tests)](https://github.com/troycomi/blocklint/workflows/ToxTests/badge.svg)](https://github.com/troycomi/blocklint)
-[![GitHub license](https://img.shields.io/github/license/troycomi/blocklint)](https://github.com/troycomi/blocklint/blob/master/LICENSE)
+[![GitHub Actions (Tests)](https://github.com/PrincetonUniversity/blocklint/workflows/ToxTests/badge.svg)](https://github.com/PrincetonUniversity/blocklint)
+[![GitHub license](https://img.shields.io/github/license/PrincetonUniversity/blocklint)](https://github.com/PrincetonUniversity/blocklint/blob/master/LICENSE)
 
 **blocklint** is a command line utility for finding non-inclusive wording.
 This project is inspired by [Alex.js](alexjs.com).
@@ -32,7 +32,7 @@ Blocklint is written in python and uses minimal, standard libraries.  It has
 been tested for python >= 2.7  To install:
 
 ```
-pip install git+https://github.com/troycomi/blocklint
+pip install git+https://github.com/PrincetonUniversity/blocklint
 ```
 into an appropriate environment.
 
