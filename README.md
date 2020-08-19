@@ -3,7 +3,7 @@
 [![GitHub license](https://img.shields.io/github/license/PrincetonUniversity/blocklint)](https://github.com/PrincetonUniversity/blocklint/blob/master/LICENSE)
 
 **blocklint** is a command line utility for finding non-inclusive wording.
-This project is inspired by [Alex.js](alexjs.com).
+This project is inspired by [Alex.js](https://alexjs.com).
 
 ## About
 If you've used a modern IDE, you know the importance of immediate feedback
@@ -21,7 +21,7 @@ steps to remove their usage and replace them with more appropriate language.
 This tool is not a commentary on inclusion, but rather a utility to detect
 whatever words you'd like to remove from code.
 
-[Alex.js](alexjs.com) is one option for highlighting offensive language,
+[Alex.js](https://alexjs.com) is one option for highlighting offensive language,
 but it is geared towards text documents such as markdown, misses common
 constructs in source code and is also overly broad and prone to false
 positives.  Blocklint is built with source code in mind and is more limited
