@@ -35,8 +35,11 @@ def main():
                 total_issues += process_file(handle, file, word_checkers,
                                              args['end_pos'])
 
-    if args.max_issue_threashold and args.max_issue_threashold <= total_issues:
-        exit(1)
+    if (args['max_issue_threashold'] is not None
+            and args['max_issue_threashold'] <= total_issues):
+        print(f"Found {total_issues} issues, but only "
+              f"{args['max_issue_threashold']} permitted!")
+        sys.exit(1)
 
 
 def process_file(input_file, file_name, word_checkers, end_pos):
