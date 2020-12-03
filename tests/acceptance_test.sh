@@ -40,4 +40,9 @@ echo "  stdin"
 diff <(cat tests/sample_files/test.{cc,py,txt} |
         blocklint --stdin ) \
     tests/sample_files/stdin.txt
+
+echo "  pragma"
+diff <(cat tests/sample_files/test_pragma.{cc,py,txt} |
+        blocklint --stdin ) \
+    tests/sample_files/pragma.txt
 echo Passed!

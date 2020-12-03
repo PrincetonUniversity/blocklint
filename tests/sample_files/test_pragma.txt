@@ -1,0 +1,11 @@
+push to master # blocklint: pragma
+TODO add user to black_list # blocklint: pragma
+BlAcKlIsT # blocklint: pragma
+B_Lack_List # blocklint: pragma
+B-Lack-List # blocklint: pragma
+B:Lack:List # blocklint: pragma
+blacklisted # blocklint: some other tags pragma
+this is aBlacklist # blocklint: pragma
+b.la-ck_list # blocklint: pragma
+find master/slave # blocklint: pragma
+Add file type to whi_te-list
