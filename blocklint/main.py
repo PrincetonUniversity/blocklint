@@ -24,22 +24,32 @@ ignore_class = '[^a-zA-Z0-9]'
 def main():
     args = get_args()
     word_checkers = generate_re(args)
+    total_issues = 0
 
     if args['stdin']:
-        process_file(sys.stdin, 'stdin', word_checkers, args['end_pos'])
+        total_issues += process_file(sys.stdin, 'stdin', word_checkers,
+                                     args['end_pos'])
     else:
         for file in args['files']:
             with open(file, 'r') as handle:
-                process_file(handle, file, word_checkers, args['end_pos'])
+                total_issues += process_file(handle, file, word_checkers,
+                                             args['end_pos'])
+
+    if args.max_issue_threashold and args.max_issue_threashold <= total_issues:
+        exit(1)
+
 
 def process_file(input_file, file_name, word_checkers, end_pos):
+    num_matched = 0
     try:
         for i, line in enumerate(input_file, 1):
             for match in check_line(line, word_checkers,
                                     file_name, i, end_pos):
+                num_matched += 1
                 print(match)
     except FileNotFoundError:
         pass
+    return num_matched
 
 
 def get_args(args=None):
@@ -60,6 +70,9 @@ def get_args(args=None):
                         help='Show the end position of a match in output')
     parser.add_argument('--stdin', action='store_true',
                         help='Use stdin as input instead of file list')
+    parser.add_argument("--max-issue-threashold", type=int, required=False,
+                        help='Cause non-zero exit status of more than this '
+                        'many issues found')
     args = vars(parser.parse_args(args))
 
     # from least to most restrictive
@@ -142,6 +155,7 @@ def check_line(line, word_checkers, file, line_number, end_pos=False):
                 start=match.start()+1,
                 end=match.end(),
                 word=word)
+
 
 if __name__ == '__main__':
     main()
