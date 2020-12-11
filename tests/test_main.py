@@ -14,6 +14,7 @@ def test_get_args_wordlists(mocker):
         'files': [],
         'end_pos': False,
         'stdin': False,
+        'max_issue_threshold': None,
         'wordlist': []}
 
     # set each list in turn
@@ -24,6 +25,7 @@ def test_get_args_wordlists(mocker):
         'files': [],
         'end_pos': False,
         'stdin': True,
+        'max_issue_threshold': None,
         'wordlist': []}
 
     args = bl.get_args('--exactlist test,test2'.split())
@@ -33,6 +35,7 @@ def test_get_args_wordlists(mocker):
         'files': [],
         'end_pos': False,
         'stdin': False,
+        'max_issue_threshold': None,
         'wordlist': []}
 
     args = bl.get_args('--wordlist test2'.split())
@@ -42,6 +45,7 @@ def test_get_args_wordlists(mocker):
         'files': [],
         'end_pos': False,
         'stdin': False,
+        'max_issue_threshold': None,
         'wordlist': ['test2']}
 
     # remove duplicate words
@@ -54,6 +58,7 @@ def test_get_args_wordlists(mocker):
         'files': [],
         'end_pos': True,
         'stdin': False,
+        'max_issue_threshold': None,
         'wordlist': ['test3']}
 
     # remove words from restrictive lists that are in more permissive ones
@@ -67,6 +72,7 @@ def test_get_args_wordlists(mocker):
         'files': [],
         'end_pos': True,
         'stdin': False,
+        'max_issue_threshold': None,
         'wordlist': []}
 
     args = bl.get_args(('--blocklist test1 '
@@ -78,6 +84,7 @@ def test_get_args_wordlists(mocker):
         'files': [],
         'end_pos': False,
         'stdin': False,
+        'max_issue_threshold': None,
         'wordlist': ['test']}
 
 

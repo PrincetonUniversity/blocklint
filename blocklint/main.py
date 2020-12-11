@@ -35,10 +35,12 @@ def main():
                 total_issues += process_file(handle, file, word_checkers,
                                              args['end_pos'])
 
-    if (args['max_issue_threashold'] is not None
-            and args['max_issue_threashold'] <= total_issues):
-        print(f"Found {total_issues} issues, but only "
-              f"{args['max_issue_threashold']} permitted!")
+    if (args['max_issue_threshold'] is not None
+            and args['max_issue_threshold'] <= total_issues):
+        print(("Found {issues} issues, but only "
+               "{max} permitted!").format(
+                   issues=total_issues,
+                   max=args['max_issue_threashold']))
         sys.exit(1)
 
 
@@ -74,7 +76,7 @@ def get_args(args=None):
                         help='Show the end position of a match in output')
     parser.add_argument('--stdin', action='store_true',
                         help='Use stdin as input instead of file list')
-    parser.add_argument("--max-issue-threashold", type=int, required=False,
+    parser.add_argument("--max-issue-threshold", type=int, required=False,
                         help='Cause non-zero exit status of more than this '
                         'many issues found')
     args = vars(parser.parse_args(args))
