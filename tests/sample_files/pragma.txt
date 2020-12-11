@@ -1,0 +1,3 @@
+test_pragma.cc:6:20: use of "slave"
+test_pragma.py:6:20: use of "slave"
+test_pragma.txt:11:18: use of "whitelist"

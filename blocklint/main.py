@@ -32,6 +32,7 @@ def main():
             with open(file, 'r') as handle:
                 process_file(handle, file, word_checkers, args['end_pos'])
 
+
 def process_file(input_file, file_name, word_checkers, end_pos):
     try:
         for i, line in enumerate(input_file, 1):
@@ -134,6 +135,11 @@ def check_line(line, word_checkers, file, line_number, end_pos=False):
     fmt_str = '{file}:{line_number}:{start}: use of "{word}"'
     if end_pos:
         fmt_str = '{file}:{line_number}:{start}:{end}: use of "{word}"'
+
+    pragma_regex = re.compile(r"blocklint:.*pragma")
+    if pragma_regex.search(line):
+        return
+
     for word, regex in word_checkers.items():
         for match in regex.finditer(line):
             yield fmt_str.format(
@@ -142,6 +148,7 @@ def check_line(line, word_checkers, file, line_number, end_pos=False):
                 start=match.start()+1,
                 end=match.end(),
                 word=word)
+
 
 if __name__ == '__main__':
     main()
