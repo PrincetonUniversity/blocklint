@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -e 
+set -e
 
 echo "No threashold..."
 blocklint sample_files/test.* > /dev/null

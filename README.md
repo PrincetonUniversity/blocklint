@@ -1,5 +1,6 @@
 # blocklint
 [![GitHub Actions (Tests)](https://github.com/PrincetonUniversity/blocklint/workflows/ToxTests/badge.svg)](https://github.com/PrincetonUniversity/blocklint)
+[![GitHub Actions (pre-commit)](https://github.com/PrincetonUniversity/blocklint/workflows/pre-commit/badge.svg)](https://github.com/PrincetonUniversity/blocklint)
 [![GitHub license](https://img.shields.io/github/license/PrincetonUniversity/blocklint)](https://github.com/PrincetonUniversity/blocklint/blob/master/LICENSE)
 
 **blocklint** is a command line utility for finding non-inclusive wording.
@@ -17,7 +18,7 @@ becomes more intuitive but the linter is always there to nudge you if you slip.
 We are in the midst of changing attitudes towards words and phrases that are
 not inclusive. Not only are developers acknowledging the offensive history of
 terms like "master/slave" and "blacklist/whitelist", but we are taking active
-steps to remove their usage and replace them with more appropriate language. 
+steps to remove their usage and replace them with more appropriate language.
 This tool is not a commentary on inclusion, but rather a utility to detect
 whatever words you'd like to remove from code.
 
@@ -32,7 +33,7 @@ Blocklint is written in python and uses minimal, standard libraries.  It has
 been tested for python >= 2.7  To install:
 
 ```
-pip install git+https://github.com/PrincetonUniversity/blocklint
+pip install blocklint
 ```
 into an appropriate environment.
 

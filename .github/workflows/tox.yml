@@ -1,6 +1,9 @@
 name: ToxTests
 
-on: [push]
+on:
+  pull_request:
+  push:
+    branches: [master]
 
 jobs:
   build:
