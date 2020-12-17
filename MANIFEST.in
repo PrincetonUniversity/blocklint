@@ -1,0 +1,10 @@
+include LICENSE
+recursive-include blocklint *.py
+include *.yaml
+include tox.ini
+recursive-include integration *.md
+recursive-include integration *.yaml
+recursive-include tests *.cc
+recursive-include tests *.py
+recursive-include tests *.sh
+recursive-include tests *.txt

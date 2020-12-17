@@ -1,0 +1,12 @@
+[build-system]
+requires = [
+    "setuptools>=42",
+    "setuptools_scm[toml]>=3.4",
+    "wheel",
+    "rfc3986>=1.4.0",
+    "keyring>=15.1"
+    ]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools_scm]
+write_to = "blocklint/version.py"
