@@ -12,8 +12,3 @@ repos:
   - id: mixed-line-ending
   - id: requirements-txt-fixer
   - id: trailing-whitespace
-
-- repo: https://github.com/mgedmin/check-manifest
-  rev: "0.45"
-  hooks:
-  - id: check-manifest
