@@ -2,23 +2,28 @@
 
 set -e
 
-echo "No threashold..."
-blocklint sample_files/test.* > /dev/null
+echo "Max threshold tests"
+echo "  No threshold"
+blocklint tests/sample_files/test.* > /dev/null  || echo "Failed"
 
-echo "Issue count under threashold..."
-blocklint sample_files/test.* --max-issue-threashold=100 > /dev/null
+echo "  Issue count under threshold"
+blocklint tests/sample_files/test.* --max-issue-threshold=100 > /dev/null  \
+    || echo "Failed"
 
-echo "Issue count one over threashold"
-blocklint sample_files/test.* --max-issue-threashold=28 > /dev/null
+echo "  Issue count one over threshold"
+blocklint tests/sample_files/test.* --max-issue-threshold=28 > /dev/null  \
+    || echo "Failed"
 
-echo "Issue count at threashold"
-if blocklint sample_files/test.* --max-issue-threashold=27 > /dev/null; then
+echo "  Issue count at threshold"
+if blocklint tests/sample_files/test.* --max-issue-threshold=27 > /dev/null; then
+    echo "Failed"
     exit 1
 fi
 
-echo "Issue count under threashold"
-if blocklint sample_files/test.* --max-issue-threashold=20 > /dev/null; then
+echo "  Issue count under threshold"
+if blocklint tests/sample_files/test.* --max-issue-threshold=26 > /dev/null; then
+    echo "Failed"
     exit 1
 fi
 
-echo "Done"
+echo Passed!
