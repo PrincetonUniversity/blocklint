@@ -1,13 +1,65 @@
 import pytest
 import re
+import sys
 
 import blocklint.main as bl
+
+# this is hacky, but only for testing...
+try:  # python 2
+    from StringIO import StringIO
+    stdin_str = u'\n'.join([u'bab']*10 + [u'aba']*10)
+except:  # python 3
+    from io import StringIO
+    stdin_str = '\n'.join(['bab']*10 + ['aba']*10)
+
+
+def test_main(mocker):
+    sys.stdin = StringIO(stdin_str)
+    mock_print = mocker.patch('blocklint.main.print')
+    bl.main(('--stdin --blocklist aba').split())
+    assert mock_print.call_args_list == [
+        mocker.call('stdin:' + str(i) + ':1: use of "aba"')
+        for i in range(11, 21)]
+
+
+def test_main_max_issues(mocker):
+    sys.stdin = StringIO(stdin_str)
+    mock_exit = mocker.patch('sys.exit')
+
+    # higher
+    mock_print = mocker.patch('blocklint.main.print')
+    bl.main(('--stdin --blocklist aba --max-issue-threshold 11').split())
+    assert mock_print.call_args_list == [
+        mocker.call('stdin:' + str(i) + ':1: use of "aba"')
+        for i in range(11, 21)]
+    mock_exit.assert_not_called()
+
+    # equal
+    sys.stdin = StringIO('\n'.join(['bab']*10 + ['aba']*10))
+    mock_print.reset_mock()
+    bl.main(('--stdin --blocklist aba --max-issue-threshold 10').split())
+    assert mock_print.call_args_list == (
+        [mocker.call('stdin:' + str(i) + ':1: use of "aba"')
+         for i in range(11, 21)] +
+        [mocker.call('Found 10 issues, with maximum set to 10!')])
+    mock_exit.assert_called_with(1)
+
+    # lower
+    sys.stdin = StringIO('\n'.join(['bab']*10 + ['aba']*10))
+    mock_print.reset_mock()
+    mock_exit.reset_mock()
+    bl.main(('--stdin --blocklist aba --max-issue-threshold 9').split())
+    assert mock_print.call_args_list == ([
+        mocker.call('stdin:' + str(i) + ':1: use of "aba"')
+        for i in range(11, 21)] +
+        [mocker.call('Found 10 issues, with maximum set to 9!')])
+    mock_exit.assert_called_with(1)
 
 
 def test_get_args_wordlists(mocker):
     mocker.patch('os.getcwd', return_value='')
     # defaults
-    args = bl.get_args()
+    args = bl.get_args([])
     assert args == {
         'blocklist': ['blacklist', 'master', 'slave', 'whitelist'],
         'exactlist': [],

@@ -1,3 +1,4 @@
+from __future__ import print_function
 import re
 import sys
 import argparse
@@ -21,8 +22,8 @@ ignore_class = '[^a-zA-Z0-9]'
 #     USER_CONFIG = None
 
 
-def main():
-    args = get_args()
+def main(args=None):
+    args = get_args(args)
     word_checkers = generate_re(args)
     total_issues = 0
 
@@ -37,10 +38,10 @@ def main():
 
     if (args['max_issue_threshold'] is not None
             and args['max_issue_threshold'] <= total_issues):
-        print(("Found {issues} issues, but only "
-               "{max} permitted!").format(
+        print(("Found {issues} issues, with maximum set to "
+               "{max}!").format(
                    issues=total_issues,
-                   max=args['max_issue_threashold']))
+                   max=args['max_issue_threshold']))
         sys.exit(1)
 
 
