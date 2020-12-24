@@ -26,4 +26,4 @@ if blocklint tests/sample_files/test.* --max-issue-threshold=26 > /dev/null; the
     exit 1
 fi
 
-echo "Done"
+echo Passed!
