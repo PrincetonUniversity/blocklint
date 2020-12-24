@@ -40,7 +40,7 @@ def main():
         print(("Found {issues} issues, but only "
                "{max} permitted!").format(
                    issues=total_issues,
-                   max=args['max_issue_threashold']))
+                   max=args['max_issue_threshold']))
         sys.exit(1)
 
 
