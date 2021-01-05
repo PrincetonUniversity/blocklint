@@ -2,6 +2,7 @@ from __future__ import print_function
 import re
 import sys
 import argparse
+import configparser
 import os
 from collections import OrderedDict
 
@@ -45,7 +46,6 @@ def main(args=None):
         sys.exit(1)
 
 
-
 def process_file(input_file, file_name, word_checkers, end_pos):
     num_matched = 0
     try:
@@ -81,6 +81,32 @@ def get_args(args=None):
                         help='Cause non-zero exit status of more than this '
                         'many issues found')
     args = vars(parser.parse_args(args))
+
+    config_paths = [
+        os.path.join(os.path.expanduser('~'), '.blocklint'),
+        './.blocklint',
+        './setup.cfg',
+        './tox.ini',
+    ]
+    present_config_files = [
+        path for path in config_paths if os.path.exists(path)
+    ]
+    config = configparser.ConfigParser()
+    for path in present_config_files:
+        config.read(path)
+    config_settings = {}
+    if 'blocklint' in config:
+        config_settings = dict(config['blocklint'])
+    for key in args:
+        if args[key] is None and key in config_settings:
+            if key in ["end_pos", "stdin"]:
+                if config_settings[key] == "store_true":
+                    config_settings[key] = True
+                else:
+                    config_settings[key] = False
+            if key in ['max_issue_threshold']:
+                config_settings[key] = int(config_settings[key])
+            args[key] = config_settings[key]
 
     # from least to most restrictive
     wordlists = ('blocklist', 'wordlist', 'exactlist')
