@@ -44,4 +44,9 @@ diff <(cat tests/sample_files/test.{cc,py,txt} |
 echo "  pragma"
 diff <(blocklint tests/sample_files/test_pragma.{cc,py,txt}) \
     tests/sample_files/pragma.txt
+
+echo "  module entrypoint"
+diff <(python -m blocklint tests/sample_files/test.{cc,py,txt}) \
+    tests/sample_files/default.txt
+
 echo Passed!
