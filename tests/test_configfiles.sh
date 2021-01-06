@@ -18,7 +18,7 @@ if blocklint tests/sample_files/test.* > /dev/null; then
 fi
 
 echo "  Local .blocklint config with command line overrides"
-blocklint tests/sample_files/test.* --max-issue-threshold=30 > /dev/null || echo "Failed" 
+blocklint tests/sample_files/test.* --max-issue-threshold=30 > /dev/null || echo "Failed"
 rm ./.blocklint
 
 echo " Local setup.cfg config"
@@ -29,7 +29,7 @@ if blocklint ../../sample_files/test.* > /dev/null; then
 fi
 
 echo "  Local .setup.cfg config with command line overrides"
-blocklint tests/sample_files/test.* --max-issue-threshold=30 > /dev/null || echo "Failed" 
+blocklint tests/sample_files/test.* --max-issue-threshold=30 > /dev/null || echo "Failed"
 
 
 echo " Local tox.ini config"
@@ -40,7 +40,7 @@ if blocklint ../../sample_files/test.* > /dev/null; then
 fi
 
 echo "  Local .tox.ini config with command line overrides"
-blocklint tests/sample_files/test.* --max-issue-threshold=30 > /dev/null || echo "Failed" 
+blocklint tests/sample_files/test.* --max-issue-threshold=30 > /dev/null || echo "Failed"
 
 echo " Multiple local configs (tox)"
 cd ../tox_setup

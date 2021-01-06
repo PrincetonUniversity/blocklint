@@ -84,7 +84,7 @@ The `--stdin` flag will take values from stdin instead of a file or directory.
 ## Configuration
 
 Blocklint supports the standard `ini` configuration format used by many other
-linting tools, including 
+linting tools, including
 [flake8](https://flake8.pycqa.org/en/latest/user/configuration.html).
 
 Command line arguments have highest priority, and override any arguments derived
