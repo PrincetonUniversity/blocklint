@@ -56,4 +56,10 @@ if blocklint ../../sample_files/test.* > /dev/null; then
     exit 1
 fi
 
+echo " Flag and list options"
+cd ../flag_and_list
+diff <(cat ../../sample_files/test.{cc,py,txt} |
+        blocklint --stdin ) \
+    ../../sample_files/stdin_wordlist.txt
+
 echo Passed!

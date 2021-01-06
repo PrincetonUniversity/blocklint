@@ -99,13 +99,10 @@ def get_args(args=None):
         config_settings = dict(config['blocklint'])
     for key in args:
         if args[key] is None and key in config_settings:
-            if key in ["end_pos", "stdin"]:
-                if config_settings[key] == "store_true":
-                    config_settings[key] = True
-                else:
-                    config_settings[key] = False
+            if key in ['end_pos', 'stdin']:
+                config_settings[key] = config.getboolean('blocklint', key)
             if key in ['max_issue_threshold']:
-                config_settings[key] = int(config_settings[key])
+                config_settings[key] = config.getint('blocklint', key)
             args[key] = config_settings[key]
 
     # from least to most restrictive
