@@ -81,6 +81,25 @@ to the start position.
 
 The `--stdin` flag will take values from stdin instead of a file or directory.
 
+## Configuration
+
+Blocklint supports the standard `ini` configuration format used by many other
+linting tools, including
+[flake8](https://flake8.pycqa.org/en/latest/user/configuration.html).
+
+Command line arguments have highest priority, and override any arguments derived
+from configuration files. Next highest are local files `tox.ini`, `setup.cfg`,
+and `.blocklint`. Finally, a global config in `~/.blocklint` may be used.
+
+Config files should contain a blocklint section in ini format, for example:
+
+```
+[blocklint]
+max_issue_threshold=10
+blocklist=test,asdf
+end_pos=store_true
+```
+
 ## Integrations
 The integration directory contains information on using blocklint for:
 - [ALE](https://github.com/dense-analysis/ale)
