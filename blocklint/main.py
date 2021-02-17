@@ -5,7 +5,8 @@ import argparse
 import configparser
 import os
 from collections import OrderedDict
-from typing import Dict, Set, Union
+if sys.version_info >= (3, 5):
+    from typing import Dict, Set, Union
 
 
 ignore_class = '[^a-zA-Z0-9]'
