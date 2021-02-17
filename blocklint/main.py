@@ -86,7 +86,7 @@ def get_args(args=None):
                         'many issues found')
     parser.add_argument("--skip-files", type=str,
                         help='Paths to files that should _not_ be checked by'
-                        'by blocklint, even if within the a checked directory')
+                        'blocklint, even if within the a checked directory')
     args = vars(parser.parse_args(args))
 
     config_paths = [
