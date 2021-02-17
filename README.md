@@ -82,6 +82,10 @@ to the start position.
 
 The `--stdin` flag will take values from stdin instead of a file or directory.
 
+The `--skip-files` flag takes a comma-or-newline separated list of paths to files
+that should not be checked by blocklint. This is useful when running blocklint on
+a large directory.
+
 ## Configuration
 
 Blocklint supports the standard `ini` configuration format used by many other

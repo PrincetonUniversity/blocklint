@@ -67,6 +67,7 @@ def test_get_args_wordlists(mocker):
         'end_pos': False,
         'stdin': False,
         'max_issue_threshold': None,
+        'skip_files': None,
         'wordlist': []}
 
     # set each list in turn
@@ -77,6 +78,7 @@ def test_get_args_wordlists(mocker):
         'files': [],
         'end_pos': False,
         'stdin': True,
+        'skip_files': None,
         'max_issue_threshold': None,
         'wordlist': []}
 
@@ -87,6 +89,7 @@ def test_get_args_wordlists(mocker):
         'files': [],
         'end_pos': False,
         'stdin': False,
+        'skip_files': None,
         'max_issue_threshold': None,
         'wordlist': []}
 
@@ -97,6 +100,7 @@ def test_get_args_wordlists(mocker):
         'files': [],
         'end_pos': False,
         'stdin': False,
+        'skip_files': None,
         'max_issue_threshold': None,
         'wordlist': ['test2']}
 
@@ -110,6 +114,7 @@ def test_get_args_wordlists(mocker):
         'files': [],
         'end_pos': True,
         'stdin': False,
+        'skip_files': None,
         'max_issue_threshold': None,
         'wordlist': ['test3']}
 
@@ -124,6 +129,7 @@ def test_get_args_wordlists(mocker):
         'files': [],
         'end_pos': True,
         'stdin': False,
+        'skip_files': None,
         'max_issue_threshold': None,
         'wordlist': []}
 
@@ -136,8 +142,26 @@ def test_get_args_wordlists(mocker):
         'files': [],
         'end_pos': False,
         'stdin': False,
+        'skip_files': None,
         'max_issue_threshold': None,
         'wordlist': ['test']}
+
+    args = bl.get_args(('--blocklist test1 '
+                        '--skip-files tests/sample_files/test.py,'
+                        'tests/sample_files/test.txt '
+                        'files tests/sample_files/test.py '
+                        'tests/sample_files/test.cc').split())
+
+    # Test skip_files filter
+    assert args == {
+        'blocklist': ['test1'],
+        'exactlist': [],
+        'files': ['tests/sample_files/test.cc'],
+        'end_pos': False,
+        'stdin': False,
+        'skip_files': set(('tests/sample_files/test.py', 'tests/sample_files/test.txt')),
+        'max_issue_threshold': None,
+        'wordlist': []}
 
 
 def test_ignore_special():
