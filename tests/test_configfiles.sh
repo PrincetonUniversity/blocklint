@@ -18,7 +18,7 @@ if blocklint tests/sample_files/test.* > /dev/null; then
 fi
 
 echo "  Local .blocklint config with command line overrides"
-blocklint tests/sample_files/test.* --max-issue-threshold=30 > /dev/null || echo "Failed"
+blocklint tests/sample_files/test.* --max-issue-threshold=30 > /dev/null || (echo "Failed" && exit 1)
 rm ./.blocklint
 
 echo " Local setup.cfg config"
@@ -29,7 +29,7 @@ if blocklint ../../sample_files/test.* > /dev/null; then
 fi
 
 echo "  Local .setup.cfg config with command line overrides"
-blocklint tests/sample_files/test.* --max-issue-threshold=30 > /dev/null || echo "Failed"
+blocklint tests/sample_files/test.* --max-issue-threshold=30 > /dev/null || (echo "Failed" && exit 1)
 
 
 echo " Local tox.ini config"
@@ -40,7 +40,7 @@ if blocklint ../../sample_files/test.* > /dev/null; then
 fi
 
 echo "  Local .tox.ini config with command line overrides"
-blocklint tests/sample_files/test.* --max-issue-threshold=30 > /dev/null || echo "Failed"
+blocklint tests/sample_files/test.* --max-issue-threshold=30 > /dev/null || (echo "Failed" && exit 1)
 
 echo " Multiple local configs (tox)"
 cd ../tox_setup
@@ -61,5 +61,9 @@ cd ../flag_and_list
 diff <(cat ../../sample_files/test.{cc,py,txt} |
         blocklint --stdin ) \
     ../../sample_files/stdin_wordlist.txt
+
+echo " Skip-files in config"
+cd ../skip_files
+blocklint ../../sample_files/test.* > /dev/null || (echo "Failed" && exit 1)
 
 echo Passed!
