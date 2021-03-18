@@ -1,0 +1,12 @@
+==============================================================================
+*blocklint.txt*   Highlight non-inclusive words                    *blocklint*
+
+Using ALE, lint all file types.  Requires python and ale.
+
+Assign g:blocklint_command to change how blocklint is invoked.
+Default is `which blocklint` or (failing that) `python blocklint/main.py`.
+
+Assign g:blocklint_options to modify options.
+Will always append `-e --stdin`.
+
+ vim:tw=78:et:ft=help:norl:
