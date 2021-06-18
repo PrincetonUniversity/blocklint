@@ -105,6 +105,8 @@ blocklist=test,asdf
 end_pos=store_true
 ```
 
+Other example blocklists can be found [here](https://contentdesign.intuit.com/accessibility-and-inclusion/abolish-racist-language/#harmful-words).
+
 ## Integrations
 The integration directory contains information on using blocklint for:
 - [ALE](https://github.com/dense-analysis/ale)
