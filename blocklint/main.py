@@ -70,7 +70,7 @@ def get_args(args=None):
                         'files in current directory')
     parser.add_argument('--blocklist', help='Comma separated list of words '
                         'to lint in any context, with possibly special '
-                        'characters between, case insensitive'
+                        'characters between, case insensitive; '
                         'DEFAULT to master,slave,whitelist,blacklist')
     parser.add_argument('--wordlist', help='Comma separated list of words '
                         'to lint as whole words, with possibly special '
@@ -85,8 +85,8 @@ def get_args(args=None):
                         help='Cause non-zero exit status of more than this '
                         'many issues found')
     parser.add_argument("--skip-files", type=str,
-                        help='Paths to files that should _not_ be checked by'
-                        'blocklint, even if within the a checked directory')
+                        help='Paths to files that should _not_ be checked by '
+                        'blocklint, even if within a checked directory')
     args = vars(parser.parse_args(args))
 
     config_paths = [
