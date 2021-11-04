@@ -116,7 +116,7 @@ def get_args(args=None):
     if args['skip_files'] is not None:
         # config files have multiline args
         skip_files = args['skip_files'].split('\n')
-        skip_files = [path for line in skip_files
+        skip_files = [os.path.abspath(path) for line in skip_files
                       for path in line.split(',')]
         args['skip_files'] = set(skip_files)
 
