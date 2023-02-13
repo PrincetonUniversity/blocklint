@@ -107,6 +107,17 @@ end_pos=store_true
 
 Other example blocklists can be found [here](https://contentdesign.intuit.com/accessibility-and-inclusion/abolish-racist-language/#harmful-words).
 
+## Skipping lines
+In addition to skipping entire files with the `--skip-files` option, single
+lines can be skipped by including the (regex) phrase `blocklint:.*pragma`.
+For example:
+```python
+def main(blacklist, white_list):  # blocklint: pragma
+    for item in blacklist:  # blocklint: some other information pragma
+        ...
+```
+will pass all checks.
+
 ## Integrations
 The integration directory contains information on using blocklint for:
 - [ALE](https://github.com/dense-analysis/ale)
