@@ -157,7 +157,8 @@ def get_args(args=None):
         elif os.path.isfile(file) or os.path.isabs(file):
             files.append(file)
     if args['skip_files'] is not None:
-        files = [file for file in files if file not in args['skip_files']]
+        files = [file for file in files
+            if os.path.abspath(file) not in args['skip_files']]
 
     args['files'] = files
 
