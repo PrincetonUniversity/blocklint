@@ -31,7 +31,7 @@ in scope.
 
 ## Requirements and Installation
 Blocklint is written in python and uses minimal, standard libraries.  It has
-been tested for python >= 2.7  To install:
+been tested for python >= 3.7  To install:
 
 ```
 pip install blocklint
