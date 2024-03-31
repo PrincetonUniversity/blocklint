@@ -73,47 +73,6 @@ def clean_ignored_docstrings(lines):
     return lines
 
 
-def clean_ignored_docstrings_old(lines):
-    docstring_delimiters = ('"""', 'r"""', "'''", "r'''")
-    i = 0
-    while i < len(lines):
-        line = lines[i].strip()
-
-        if line.startswith(docstring_delimiters):
-            if "'''" in line[3:] or '"""' in line[3:]:
-                # case: single line docstring
-                if "# blocklint" in line and "pragma" in line:
-                    # ignore the entire docstring
-                    lines[i] = ""
-                    i += 1
-                    continue
-                else:
-                    # don't ignore the docstring
-                    i += 1
-                    continue
-            else:
-                # case: multi-line docstring
-                line_number_of_start = i
-                i += 1
-                while "'''" not in lines[i] and '"""' not in lines[i] and i < len(lines):
-                    i += 1
-                # found the closing delimiter
-                if "# blocklint" in lines[i] and "pragma" in lines[i]:
-                    # ignore the entire docstring
-                    for j in range(line_number_of_start, i+1):
-                        lines[j] = ""
-                    i += 1
-                    continue
-                else:
-                    # don't ignore the docstring
-                    i += 1
-                    continue
-        else:
-            i += 1
-
-    return lines
-
-
 def process_file(input_file, file_name, word_checkers, end_pos):
     num_matched = 0
     try:

@@ -15,7 +15,7 @@ def process_data(data):
         return {k: v * 2 for k, v in data.items()}
     return data
 
-# multi-line singlequoate docstring containing blocked words, full docstring ignored
+# multi-line singlequote docstring containing blocked words, full docstring ignored
 def compile_allowlist_rules(rules):
     '''
     Compile whitelist rules into a usable format.
