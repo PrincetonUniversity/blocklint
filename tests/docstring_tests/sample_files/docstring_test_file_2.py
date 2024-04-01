@@ -17,7 +17,7 @@ after it
 A weird example of a docstring
 within a docstring
 ''' a docstring here
-here in the middle of 
+here in the middle of
 another blacklist docstring
 '''
 Who would

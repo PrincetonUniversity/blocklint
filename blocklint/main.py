@@ -45,17 +45,17 @@ def main(args=None):
                    issues=total_issues,
                    max=args['max_issue_threshold']))
         sys.exit(1)
-        
+
 
 def clean_ignored_docstrings(lines):
-    end_pattern = re.compile(r'("""\s*#\s*blocklint:.*pragma$|\'\'\'\s*#\s*blocklint:.*pragma$)')
+    end_pattern = re.compile(r'(("""|\'\'\')\s*#\s*blocklint:.*pragma\s*$)')
     lines_to_clear = []
 
     for i, line in enumerate(lines):
         match = end_pattern.search(line)
         if match:
             start_quote = match.group(1)[:3]  # This is either """ or '''
-            
+
             if start_quote in line[:-(len(match.group(1)))]:
                 # single line docstring
                 lines_to_clear.append((i, i+1))
@@ -65,7 +65,7 @@ def clean_ignored_docstrings(lines):
                     if start_quote in lines[j]:
                         lines_to_clear.append((j, i+1))
                         break
-                        
+
     for start_line, stop_line in lines_to_clear:
         for ignored_line in range(start_line, stop_line):
             lines[ignored_line] = ""
