@@ -15,7 +15,7 @@ re_args = bl.generate_re(args)
 def capture_stdout(func, *args, **kwargs):
     """
     Captures and returns the stdout output of a function call.
-    
+
     :param func: The function to call.
     :param args: Positional arguments to pass to the function.
     :param kwargs: Keyword arguments to pass to the function.
@@ -47,7 +47,7 @@ def capture_stdout(func, *args, **kwargs):
 
 )
 def test_docstring_processing(test_file, test_name, expected_issues_count, expected_output):
-    
+
     total_issues = 0
     with open(test_file) as handle:
         issue_count, output = capture_stdout(bl.process_file, handle, test_name, re_args, False)

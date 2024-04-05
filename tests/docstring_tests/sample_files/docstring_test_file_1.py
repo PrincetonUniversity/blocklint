@@ -2,10 +2,10 @@
 def process_data(data):
     """
     Process the given data and return a modified version to add to whitelist.
-    
+
     Parameters:
     - data: The master data to be processed, can be a list or dict.
-    
+
     Returns:
     - A modified version of the input data, where each element or value is doubled.
     """
@@ -19,10 +19,10 @@ def process_data(data):
 def compile_allowlist_rules(rules):
     '''
     Compile whitelist rules into a usable format.
-    
+
     Parameters:
     - rules: A list or dictionary of rules to compile.
-    
+
     Returns:
     - A dictionary with each rule mapped to its compiled form. This is a placeholder for actual compilation logic.
     '''  # blocklint:  pragma
@@ -47,7 +47,7 @@ def filter_blocklist_items(items, blocklist):
 def create_generic_function():
     r"""
     A generic function that performs a simple operation.
-    
+
     Side Effects:
     - Prints a master message indicating a simple operation has been performed.
     """  # blocklint:  pragma
@@ -57,10 +57,10 @@ def create_generic_function():
 def synchronize_slave_database(database):
     r"""
     Synchronize the slave database with the master database.
-    
+
     Parameters:
     - database: The slave database to be synchronized. This is a placeholder for the actual database object.
-    
+
     Side Effects:
     - Assumes synchronization logic is implemented, updates the slave database to match the master database.
     """
