@@ -38,7 +38,6 @@ def main(args=None):
             with open(file, 'r') as handle:
                 total_issues += process_file(handle, file, word_checkers,
                                              args['end_pos'])
-
     if (args['max_issue_threshold'] is not None
             and args['max_issue_threshold'] <= total_issues):
         print(("Found {issues} issues, with maximum set to "
@@ -48,10 +47,38 @@ def main(args=None):
         sys.exit(1)
 
 
+def clean_ignored_docstrings(lines):
+    end_pattern = re.compile(r'(("""|\'\'\')\s*#\s*blocklint:.*pragma\s*$)')
+    lines_to_clear = []
+
+    for i, line in enumerate(lines):
+        match = end_pattern.search(line)
+        if match:
+            start_quote = match.group(1)[:3]  # This is either """ or '''
+
+            if start_quote in line[:-(len(match.group(1)))]:
+                # single line docstring
+                lines_to_clear.append((i, i+1))
+            else:
+                # multi line docstring - scan backwards from the current line
+                for j in range(i-1, -1, -1):
+                    if start_quote in lines[j]:
+                        lines_to_clear.append((j, i+1))
+                        break
+
+    for start_line, stop_line in lines_to_clear:
+        for ignored_line in range(start_line, stop_line):
+            lines[ignored_line] = ""
+
+    return lines
+
+
 def process_file(input_file, file_name, word_checkers, end_pos):
     num_matched = 0
     try:
-        for i, line in enumerate(input_file, 1):
+        lines = input_file.readlines()
+        lines = clean_ignored_docstrings(lines)
+        for i, line in enumerate(lines, 1):
             for match in check_line(line, word_checkers,
                                     file_name, i, end_pos):
                 num_matched += 1
