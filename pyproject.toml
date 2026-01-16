@@ -18,10 +18,3 @@ dev = [
     "pytest>=9.0.2",
     "pytest-mock>=3.15.1",
 ]
-
-[tool.uv]
-managed = true
-
-[tool.uv.scripts]
-test-acceptance = "bash tests/acceptance_test.sh"
-test-all = { composite = ["pytest", "test-acceptance"] }
