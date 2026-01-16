@@ -1,5 +1,7 @@
+.venv
+.python-version
 __pycache__
 *.pyc
 *.egg-info/
-.tox/
-blocklint/version.py
+build/
+dist

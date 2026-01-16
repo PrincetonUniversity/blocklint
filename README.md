@@ -1,8 +1,8 @@
 # blocklint
 [![PyPI version](https://badge.fury.io/py/blocklint.svg)](https://badge.fury.io/py/blocklint)
-[![GitHub Actions (Tests)](https://github.com/PrincetonUniversity/blocklint/workflows/ToxTests/badge.svg)](https://github.com/PrincetonUniversity/blocklint)
+[![GitHub Actions (Tests)](https://github.com/PrincetonUniversity/blocklint/workflows/CI/badge.svg)](https://github.com/PrincetonUniversity/blocklint)
 [![GitHub Actions (pre-commit)](https://github.com/PrincetonUniversity/blocklint/workflows/pre-commit/badge.svg)](https://github.com/PrincetonUniversity/blocklint)
-[![GitHub license](https://img.shields.io/github/license/PrincetonUniversity/blocklint)](https://github.com/PrincetonUniversity/blocklint/blob/master/LICENSE)
+[![GitHub license](https://img.shields.io/github/license/PrincetonUniversity/blocklint)](https://github.com/PrincetonUniversity/blocklint/blob/main/LICENSE)
 
 **blocklint** is a command line utility for finding non-inclusive wording.
 This project is inspired by [Alex.js](https://alexjs.com).
