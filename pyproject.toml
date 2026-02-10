@@ -17,9 +17,11 @@ build-backend = "uv_build"
 dev = [
     "pip-audit>=2.10.0",
     "poethepoet>=0.41.0",
+    "pre-commit>=4.5.1",
     "pyright>=1.1.408",
     "pytest>=9.0.2",
     "pytest-mock>=3.15.1",
+    "ruff>=0.15.0",
 ]
 
 [tool.poe.tasks]
