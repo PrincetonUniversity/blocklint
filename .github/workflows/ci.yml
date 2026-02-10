@@ -24,11 +24,8 @@ jobs:
       - name: Install dependencies
         run: uv sync --all-extras --dev
 
-      - name: Run Pytest
-        run: uv run pytest
+      - name: Run tests
+        run: uv run poe test-all
 
-      - name: Run Acceptance Tests
-        run: |
-          uv run bash tests/acceptance_test.sh
-          uv run bash tests/test_max_issue_threshold.sh
-          uv run bash tests/test_configfiles.sh
+      - name: Run lints
+        run: uv run poe check-all

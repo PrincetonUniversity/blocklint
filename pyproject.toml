@@ -15,6 +15,38 @@ build-backend = "uv_build"
 
 [dependency-groups]
 dev = [
+    "pip-audit>=2.10.0",
+    "poethepoet>=0.41.0",
+    "pyright>=1.1.408",
     "pytest>=9.0.2",
     "pytest-mock>=3.15.1",
+]
+
+[tool.poe.tasks]
+test-all = ["tests", "acceptance", "max_issue", "configfile"]
+tests = "pytest"
+acceptance = "bash tests/acceptance_test.sh"
+max_issue = "bash tests/test_max_issue_threshold.sh"
+configfile = "bash tests/test_configfiles.sh"
+
+
+check-all = ["lint", "format", "pre-commit", "typecheck", "audit", "lock-check"]
+lint = "ruff check ."
+format = "ruff format ."
+pre-commit = "pre-commit run --all"
+typecheck = "pyright"
+audit = "pip-audit"
+lock-check = "uv lock --check"
+
+[tool.ruff]
+exclude = [
+  "tests/sample_files",
+  "tests/docstring_tests"
+]
+
+[tool.pyright]
+include = ["src", "tests"]
+exclude = [
+  "tests/sample_files",
+  "tests/docstring_tests"
 ]

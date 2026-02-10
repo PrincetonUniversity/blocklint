@@ -39,7 +39,7 @@ def main(args=None):
         and args["max_issue_threshold"] <= total_issues
     ):
         print(
-            ("Found {issues} issues, with maximum set to " "{max}!").format(
+            ("Found {issues} issues, with maximum set to {max}!").format(
                 issues=total_issues, max=args["max_issue_threshold"]
             )
         )
@@ -93,7 +93,7 @@ def get_args(args=None):
     parser.add_argument(
         "files",
         nargs="*",
-        help="Files or directories to lint, default all " "files in current directory",
+        help="Files or directories to lint, default all files in current directory",
     )
     parser.add_argument(
         "--blocklist",
@@ -110,8 +110,7 @@ def get_args(args=None):
     )
     parser.add_argument(
         "--exactlist",
-        help="Comma separated list of words "
-        "to lint as whole words exactly as entered",
+        help="Comma separated list of words to lint as whole words exactly as entered",
     )
     parser.add_argument(
         "-e",
@@ -126,7 +125,7 @@ def get_args(args=None):
         "--max-issue-threshold",
         type=int,
         required=False,
-        help="Cause non-zero exit status of more than this " "many issues found",
+        help="Cause non-zero exit status of more than this many issues found",
     )
     parser.add_argument(
         "--skip-files",
